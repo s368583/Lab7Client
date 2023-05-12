@@ -6,6 +6,8 @@ import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.channels.SocketChannel;
+import java.util.concurrent.TimeUnit;
 
 
 public class Client {
@@ -17,12 +19,13 @@ public class Client {
     private SocketAddress serverAddress;
 
     private byte[] bytes;
-    private ByteBuffer buffer; //это поток!!
+    private ByteBuffer buffer;
 
     public Client() throws IOException {
         clientChannel = DatagramChannel.open();  //канал для передачи данных в обе стороны
+        clientChannel.configureBlocking( false );  //перевод в неблокирующий режим
         bytes = new byte[16384];
-        buffer = ByteBuffer.wrap(bytes); //создается буфер (nio)
+        buffer = ByteBuffer.wrap(bytes); //заполняется буффер
     }
 
     public void connect(String hostname, int port) throws IOException {
@@ -38,21 +41,31 @@ public class Client {
         }
     }
 
-    public void disconnect() throws IOException {
-        clientChannel.close();
-        System.out.println("Выполнено отключение от сервера");
-    }
 
     public void send(String message) throws IOException {
         bytes = new byte[16384];
-        buffer = ByteBuffer.wrap(message.getBytes()); //заполнение буффера
+        buffer = ByteBuffer.wrap(message.getBytes());
         clientChannel.send(buffer, serverAddress);
         buffer = ByteBuffer.wrap(bytes);
         buffer.clear();
     }
 
     public String receive() throws IOException {
-        serverAddress = clientChannel.receive(buffer); //получам данные с сервера
+        for( int i = 0; i < 50; i++) {
+            serverAddress = clientChannel.receive(buffer); //получам данные с сервера
+            if(serverAddress!=null) break;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new IOException(e);
+            }
+        }
+
+        if(serverAddress == null) {
+            System.out.println("Потеряна связь с сервером");
+            throw new IOException("А связи то нет!!!");
+        }
+
         buffer.flip(); //буфер в режиме чтения, переходим в еачало данных, а не то, где остановились в прошлый раз
         bytes = new byte[buffer.limit()];
         buffer.get(bytes, 0, buffer.limit());

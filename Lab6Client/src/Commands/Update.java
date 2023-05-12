@@ -34,11 +34,12 @@ public class Update extends Command {
         }
         catch(Exception e) {
                 System.out.println("\nДанные введены неверно\n");
-            try {
+
+            /*try {
                 Lab5.client.send("");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
-            }
+            }*/
         }
 
     }

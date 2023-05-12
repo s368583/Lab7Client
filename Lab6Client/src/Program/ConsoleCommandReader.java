@@ -56,6 +56,7 @@ public class ConsoleCommandReader {
                                     System.out.println(Lab5.client.receive());
                                 } catch (IOException e) {
                                     e.printStackTrace();
+                                    break;
                                 }
                             }
                         }
@@ -85,6 +86,7 @@ public class ConsoleCommandReader {
                                 System.out.println(Lab5.client.receive());
                             } catch (IOException e) {
                                 e.printStackTrace();
+                                break;
                             }
                         }
                         }

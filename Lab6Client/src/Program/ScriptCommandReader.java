@@ -54,6 +54,7 @@ public class ScriptCommandReader {
                         System.out.println(Lab5.client.receive());
                     } catch (IOException e) {
                         e.printStackTrace();
+                        break;
                     }
                 } catch (ClassNotFoundException e) {
                     System.out.println("\nКоманда не найдена");
@@ -77,6 +78,7 @@ public class ScriptCommandReader {
                         System.out.println(Lab5.client.receive());
                     } catch (IOException e) {
                         e.printStackTrace();
+                        break;
                     }
                 } catch (ClassNotFoundException e) {
                     System.out.println("\nКоманда не найдена");
