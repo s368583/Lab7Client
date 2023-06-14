@@ -30,7 +30,7 @@ public class ConsoleCommandReader {
                 System.out.println("Введите команду:");
             }
 
-            String consoleLine = consoleScanner.nextLine();
+            String consoleLine = consoleScanner.nextLine().toLowerCase();
             if((!consoleLine.equals("register") && !consoleLine.equals("login")) && !Lab5.loggedIn) {
                 System.out.println("Зарегистрируйтесь или войдите в систему. Введите register или login");
             }
@@ -41,7 +41,7 @@ public class ConsoleCommandReader {
             else {
                 if(consoleLine.contains(" ")) {
                     String[] consoleIn = consoleLine.split(" ");
-                    String command = consoleIn[0].substring(0, 1).toUpperCase() + consoleIn[0].substring(1);
+                    String command = consoleIn[0].substring(0, 1).toUpperCase() + consoleIn[0].substring(1).toLowerCase();
                     String argument = null;
                     try{ argument = consoleIn[1];}
                     catch (Exception e) {
@@ -88,7 +88,7 @@ public class ConsoleCommandReader {
                     }
                 }
                 else {
-                    String command = consoleLine.substring(0, 1).toUpperCase() + consoleLine.substring(1);
+                    String command = consoleLine.substring(0, 1).toUpperCase() + consoleLine.substring(1).toLowerCase();
 
                     Class<?> commandClass = null;
                     try {
